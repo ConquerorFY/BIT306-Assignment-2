@@ -29,3 +29,15 @@ export const readAll = async (cName) => {
 
     return results;
 }
+
+export const updateOne = async (iQuery, iValue, data, cName) => {
+    const query = { [iQuery]: iValue };
+
+    const collection = await db.collection(cName);
+    let dResult = await collection.deleteOne(query);
+    let iResult = await collection.insertOne({
+        ...data,
+        [iQuery]: iValue
+    })
+    return iResult;
+}
