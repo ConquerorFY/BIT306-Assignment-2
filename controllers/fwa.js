@@ -24,8 +24,23 @@ export const getFWARequests = async (req, res) => {
     employees = employees.filter((e) => e.supvID === supvID).map((e) => e.employeeID);
     // find the fwa requests for the different employees within the list
     let fwaRequests = await readAll("fwarequest");
+    let pendingRequests = [], acceptedRequests = [], rejectedRequests = [];
     fwaRequests = fwaRequests.filter((r) => employees.indexOf(r.employeeID) > -1);
-    return res.status(200).json(fwaRequests);
+    for (let f of fwaRequests) {
+        if (employees.indexOf(f.employeeID) > -1) {
+            if (f.status === "Pending") pendingRequests.push(f);
+            else if (f.status === "Accepted") acceptedRequests.push(f);
+            else if (f.status === "Rejected") rejectedRequests.push(f);
+        }
+    }
+    return res.status(200).json({
+        isSucceed: true,
+        data: {
+            pending: pendingRequests,
+            accepted: acceptedRequests,
+            rejected: rejectedRequests
+        }
+    });
 }
 
 export const updateFWARequest = async (req, res) => {

@@ -1,4 +1,4 @@
-import { insert, read } from "../db/helpers.js";
+import { insert, read, readAll } from "../db/helpers.js";
 import bcrypt from "bcryptjs";
 
 // {
@@ -50,4 +50,19 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
     return res.status(200).json({ isLogout: true, message: "Employee has been logged out!" });
+}
+
+export const getEmployeeFWACount = async (req, res) => {
+    let flexiCount = 0;
+    let wfhCount = 0;
+    let hybridCount = 0;
+
+    const employees = await readAll("employee");
+    for (let e of employees) {
+        if (e.FWAStatus === "flexi-hours") flexiCount++;
+        else if (e.FWAStatus === "work-from-home") wfhCount++;
+        else if (e.FWAStatus === "hybrid") hybridCount++;
+    }
+
+    return res.status(200).json({ flexiCount, wfhCount, hybridCount })
 }
