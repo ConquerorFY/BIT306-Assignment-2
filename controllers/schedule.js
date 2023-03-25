@@ -1,4 +1,4 @@
-import { insert, updateOne, readAll } from "../db/helpers.js";
+import { insert, updateOne, readAll, readOne } from "../db/helpers.js";
 
 // {
 //     "scheduleID": 1,
@@ -48,4 +48,9 @@ export const updateSchedule = async (req, res) => {
 export const getNewScheduleID = async (req, res) => {
     const results = await readAll("dailyschedule");
     return res.status(200).json({ isSuccess: true, id: results.length + 1 });
+}
+
+export const getScheduleBasedOnID = async (req, res) => {
+    const results = await readOne("scheduleID", req.body.scheduleID, "dailyschedule");
+    return res.status(200).json({ isSuccess: true, data: results });
 }
