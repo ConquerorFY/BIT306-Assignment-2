@@ -44,3 +44,8 @@ export const updateSchedule = async (req, res) => {
     const scheduleResult = await updateOne("scheduleID", scheduleId, newScheduleData, "dailyschedule");
     return res.status(200).json({ isUpdated: true, data: scheduleResult });
 }
+
+export const getNewScheduleID = async (req, res) => {
+    const results = await readAll("dailyschedule");
+    return res.status(200).json({ isSuccess: true, id: results.length + 1 });
+}
