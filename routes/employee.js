@@ -1,5 +1,5 @@
 import express from "express";
-import { getEmployeeFWACount, getSupervisors, login, logout, registerAccount } from '../controllers/employee.js';
+import { getEmployeeFWACount, getEmployees, getSupervisors, login, logout, registerAccount } from '../controllers/employee.js';
 
 const router = express.Router();
 
@@ -8,5 +8,6 @@ router.post("/login", login);
 router.post("/logout", logout);
 router.get("/getEmployeeFWACount", getEmployeeFWACount);
 router.get("/getSupervisors", getSupervisors);
+router.get("/getEmployees", getEmployees);
 
 export default router;

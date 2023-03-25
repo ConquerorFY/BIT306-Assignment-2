@@ -83,3 +83,8 @@ export const getSupervisors = async (req, res) => {
     })
     return res.status(200).json({ isSucess: true, data: results });
 }
+
+export const getEmployees = async (req, res) => {
+    let results = await readAll("employee");
+    return res.status(200).json({ isSucess: true, data: results });
+}
