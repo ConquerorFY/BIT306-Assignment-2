@@ -56,3 +56,8 @@ export const updateFWARequest = async (req, res) => {
     }
     return res.status(200).json({ isUpdated: true, data: fwaResult });
 }
+
+export const getNewFWARequestID = async (req, res) => {
+    const results = await readAll("fwarequest");
+    return res.status(200).json({ isSucceed: true, id: results.length + 1 });
+}
