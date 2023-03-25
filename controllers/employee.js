@@ -71,3 +71,15 @@ export const getEmployeeFWACount = async (req, res) => {
 
     return res.status(200).json({ flexiCount, wfhCount, hybridCount })
 }
+
+export const getSupervisors = async (req, res) => {
+    let results = await read("position", "supervisor", "employee");
+    results = results.map((s) => {
+        return {
+            employeeID: s.employeeID,
+            name: s.name,
+            position: s.position
+        }
+    })
+    return res.status(200).json({ isSucess: true, data: results });
+}
