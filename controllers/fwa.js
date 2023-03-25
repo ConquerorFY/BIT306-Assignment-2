@@ -61,3 +61,8 @@ export const getNewFWARequestID = async (req, res) => {
     const results = await readAll("fwarequest");
     return res.status(200).json({ isSucceed: true, id: results.length + 1 });
 }
+
+export const getFWARequest = async (req, res) => {
+    const result = await readOne("requestID", req.body.requestID, "fwarequest");
+    return res.status(200).json({ isSucceed: true, data: result });
+}

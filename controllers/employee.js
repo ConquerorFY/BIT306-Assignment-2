@@ -1,4 +1,4 @@
-import { insert, read, readAll } from "../db/helpers.js";
+import { insert, read, readAll, updateOne } from "../db/helpers.js";
 import bcrypt from "bcryptjs";
 
 // {
@@ -87,4 +87,9 @@ export const getSupervisors = async (req, res) => {
 export const getEmployees = async (req, res) => {
     let results = await readAll("employee");
     return res.status(200).json({ isSucess: true, data: results });
+}
+
+export const updateEmployee = async (req, res) => {
+    let results = await updateOne("employeeID", req.body.employeeID, req.body, "employee");
+    return res.status(200).json({ isSuccess: true, data: results });
 }
