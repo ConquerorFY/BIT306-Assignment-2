@@ -1,5 +1,6 @@
 import { insert, read, readAll, updateOne } from "../db/helpers.js";
 import bcrypt from "bcryptjs";
+import { sendMail } from "../emailer/mailer.js";
 
 // {
 //     "employeeID": "e001",
@@ -25,6 +26,11 @@ export const registerAccount = async (req, res) => {
     }
     const result = await insert(accountData, "employee");
     res.status(200).json({ isSucceed: true, message: "Registration success!!" });
+
+    const targetEmail = req.body.email;
+    const mailSubject = "Registration Success into FlexIS Management System";
+    const mailText = `The password for your accoun would be ${req.body.password}!`;
+    sendMail(targetEmail, mailSubject, mailText);
 }
 
 export const login = async (req, res) => {

@@ -1,4 +1,5 @@
 import { insert, readAll, readOne, updateOne } from "../db/helpers.js";
+import { sendMail } from "../emailer/mailer.js";
 
 // {
 //     "requestID": 1,
@@ -14,7 +15,15 @@ import { insert, readAll, readOne, updateOne } from "../db/helpers.js";
 export const insertFWARequest = async (req, res) => {
     const fwaData = req.body;
     const result = await insert(fwaData, "fwarequest");
-    return res.status(200).json({ isSucceed: true, message: 'FWA Request has been inserted!' });
+    res.status(200).json({ isSucceed: true, message: 'FWA Request has been inserted!' });
+
+    const matchedEmployee = await readOne("employeeID", req.body.employeeID, "employee");
+    const supvID = matchedEmployee.supvID
+    const matchedSupervisor = await readOne("employeeID", supvID, "employee");
+    const targetEmail = matchedSupervisor.email;
+    const mailSubject = "Notice about pending FWA request";
+    const mailText = "Therre is 1 pending FWA request waiting for you!";
+    sendMail(targetEmail, mailSubject, mailText);
 }
 
 export const getFWARequests = async (req, res) => {
@@ -54,7 +63,13 @@ export const updateFWARequest = async (req, res) => {
         const existingEmpData = await readOne("employeeID", empId, "employee");
         const empResult = await updateOne("employeeID", empId, { ...existingEmpData, "FWAStatus": empWorkType }, "employee");
     }
-    return res.status(200).json({ isUpdated: true, data: fwaResult });
+    res.status(200).json({ isUpdated: true, data: fwaResult });
+
+    const matchedEmployee = await readOne("employeeID", req.body.employeeID, "employee");
+    const targetEmail = matchedEmployee.email;
+    const mailSubject = "Notice about your FWA request";
+    const mailText = "Your FWA request is handled!";
+    sendMail(targetEmail, mailSubject, mailText);
 }
 
 export const getNewFWARequestID = async (req, res) => {
